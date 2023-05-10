@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { App } from '@slack/bolt';
+import { redisInit } from './services/redis';
 import * as router from './router';
 
 let port = 3000;
@@ -24,7 +25,8 @@ app.message('ping', async ({ message, say }) => {
 
 async function init() {
   await app.start();
-  console.log("Ready to accept messages");
+  console.log('[APP] app is running');
+  await redisInit();
 }
 
 init();
