@@ -1,6 +1,6 @@
-app.message('ping', async ({message, say}) => {
-  console.log(message);
-  await say('pong');
-});
+import * as dotenv from 'dotenv';
+dotenv.config();
+import {App} from '@slack/bolt';
+import {redisInit} from './services/redis';
+import * as router from './router';
 
-export var bruh = 50;

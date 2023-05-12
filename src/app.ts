@@ -12,9 +12,11 @@ const app = new App({
   appToken: process.env.SLACK_APP_TOKEN,
 });
 
+
 app.message('ping', async ({message, say}) => {
-  await say('pong');
+  await say('Bro score');
 });
+
 
 async function init() {
   await app.start(process.env.PORT || 3000);
