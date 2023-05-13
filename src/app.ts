@@ -2,26 +2,27 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import {App} from '@slack/bolt';
-import {redisInit} from './services/redis';
-import * as router from './router';
+import {redisInit, setValue,getValue} from './services/redis';
+import {router} from './router';
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
-  socketMode: true, // add this
+  socketMode: true,
   appToken: process.env.SLACK_APP_TOKEN,
 });
+app.message('',async({message,say})=>{
+    let result:string=await router(message);
+    if (result==="_") {
+      return;
+    }
+   say(result);
 
-
-app.message('ping', async ({message, say}) => {
-  await say('Bro score');
-});
-
+})
 
 async function init() {
   await app.start(process.env.PORT || 3000);
   console.log('[APP] app is running');
   await redisInit();
 }
-
 init();

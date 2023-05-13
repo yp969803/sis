@@ -12,7 +12,7 @@ export async function redisInit() {
   await client.connect();
 }
 
-export async function redisClose() {
+export async function redisClose(){
   await client.disconnect();
 }
 
