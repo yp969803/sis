@@ -3,6 +3,8 @@ import  {broScoreF22} from './scripts/broScoref22'
 import  {broScoreB26} from './scripts/broScoreb26'
 import  {broScoreName} from './scripts/broScoreName'
 import { namePlusMinus } from './scripts/namePlusMinus';
+import { batchPlusMinus } from './scripts/f22B26+-';
+import { info } from './scripts/info';
 dotenv.config();
 export async function router(msg:any) {
     let lowerMsg:string=(msg.text).toLowerCase();
@@ -27,30 +29,46 @@ export async function router(msg:any) {
             return ans;
         }
     }
-    else if(MsgWordArr[1]==="++"&&MsgWordArr.length===2){
+    else if(MsgWordArr.length===3&&MsgWordArr[0]==='bro'&&MsgWordArr[1]==="info"){
+        let ans:string=await info(MsgWordArr[2])
+        return ans;
+    }
+    else if(MsgWordArr[1]==="++"&&MsgWordArr.length===2&&MsgWordArr[0]!=='f21'&&MsgWordArr[0]!=='b26'){
          let ans:string=await namePlusMinus(MsgWordArr[0],"++")
          if(ans==="NULL"){
             return "No person with name "+MsgWordArr[1];
          }
          return ans;
     }
-    else if(MsgWordArr[1]==="--"&&MsgWordArr.length===2){
+    else if(MsgWordArr[1]==="--"&&MsgWordArr.length===2&&MsgWordArr[0]!=='f22'&&MsgWordArr[0]!=='b26'){
         let ans:string=await namePlusMinus(MsgWordArr[0],"--")
          if(ans==="NULL"){
             return "No person with name "+MsgWordArr[1];
          }
          return ans;
     }
+    
 
-    else if(MsgWordArr[0]==='bro'){
-        console.log('hello')
-        let str="";
-        for( let i:number=1;i<MsgWordArr.length;i++){
-             str=str+MsgWordArr[i]+" ";
-        }
-        let finalAns:string="Cannot define "+str;
-        return finalAns;
-     }
+    
+    else if(lowerMsg==="f22 ++"||lowerMsg==="f22++"||lowerMsg==="b26 ++"||lowerMsg==="b26++"){
+          await batchPlusMinus("++")
+          let ans:string=await broScoreB26()
+          return ans;
+    }
+    else if(lowerMsg==="f22 --"||lowerMsg==="f22--"||lowerMsg==="b26 --"||lowerMsg==="b26--"){
+        await batchPlusMinus("--")
+        let ans:string=await broScoreB26()
+        return ans;
+  }
+  else if(MsgWordArr[0]==='bro'){
+    console.log('hello')
+    let str="";
+    for( let i:number=1;i<MsgWordArr.length;i++){
+         str=str+MsgWordArr[i]+" ";
+    }
+    let finalAns:string="Cannot define "+str;
+    return finalAns;
+ }
      else{
         console.log(msg)
         return "_";
